@@ -24,7 +24,7 @@ int main(){
 					printf("%2i",option[i][nopts[i]]);
 				printf("\n");
 			}
-			else if(move == 1){
+			else if(move == 1){ // initialize first row
 				for(candidate = N; candidate >=1; candidate --) 
 				{
 					nopts[move]++;
@@ -37,7 +37,7 @@ int main(){
 				{
 					for(i=move-1;i>=1;i--)
 						if(candidate==option[i][nopts[i]]) break;
-					if(!(i>=1))
+					if(i<1)
 						option[move][++nopts[move]] = candidate;
 				}
 			}
