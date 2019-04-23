@@ -7,13 +7,15 @@
 int isSafe(int nopts[N+2], int row, int col, int last) {
   int i;
 
+  printf("row: %d | col: %d | last: %d\n", row, col, last);
+
   // i is the current row - nopts[i] is the current col
   for(i=1; i<N+1; i++) {
 
     // rook movement:
-    if (nopts[i] != 0 && (row == i || col == nopts[i]))
+    if (nopts[i] != 0 && (row == i || col == nopts[i])) {
       return FALSE;                  
-
+    }
     // horse movements:
 
     /*
@@ -21,40 +23,45 @@ int isSafe(int nopts[N+2], int row, int col, int last) {
       0
       1
     */
-    if (i-2 == row && nopts[i]+1 == col)
+    if (nopts[i] != 0 && (i-2 == row && nopts[i]+1 == col)) {
       return FALSE;
- 
+    }
+
     /*
       0 0 x
       1
     */
-    else if (i-1 == row && nopts[i]+2 == col)
+    else if (nopts[i] != 0 && (i-1 == row && nopts[i]+2 == col)) {
       return FALSE;
+    }
 
     /*
       1 0 0
           x
     */
-    else if (i+1 == row && nopts[i]+2 == col)
+    else if (nopts[i] != 0 && (i+1 == row && nopts[i]+2 == col)) {
       return FALSE;
+    }
 
     /*
       1
       0
       0 x
     */
-    else if (i+2 == row && nopts[i]+1 == col)
-      return FALSE;
-
-    // if filled before - safe but not allowed
-    if (last == i){
-      printf("Last: %d | i: %d\n", last, i);
-      nopts[i] = 0;
+    else if (nopts[i] != 0 && (i+2 == row && nopts[i]+1 == col)) {
       return FALSE;
     }
+
+    // if filled before - safe but not allowed
+    if (last == i) {
+      return FALSE;
+    }
+
     // if all else fails and position is blank - safe
-    else if (nopts[i] == 0)
+    else if (nopts[i] == 0) {
+      printf("HELLO~");
       return TRUE;
+    }
   }
 
   // the position is safe
@@ -86,8 +93,13 @@ int main() {
 
     if(nopts[move] > 0) {
 
+
       if (last == -1) {
         move++;
+        nopts[move] = 0;
+      }
+
+      else {
         nopts[move] = 0;
       }
       
@@ -115,7 +127,7 @@ int main() {
         }
 
         if (i == N+1) {
-          printf("Last: %d | i: %d | move: %d\n", last, i, move);
+          // printf("Last: %d | i: %d | move: %d\n", last, i, move);
           nopts[move] = 0;
           move --;
           option[move][nopts[move]] = 0; // clear chancellor
