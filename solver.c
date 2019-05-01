@@ -120,11 +120,6 @@ int main() {
 
       if(nopts[move] > 0) {
 
-        // first step
-        if(move == start) {
-          move = 0;
-        }
-
         if(last == -1) {
           move++;
           nopts[move] = 0;
@@ -160,6 +155,7 @@ int main() {
           if(last == -1) i = 1;
           else i = last;
           for(i; i<N+1; i++) {
+            // check every column of current row
             if(isSafe(nopts, move, i, last, N)) {
               option[move][i] = 1; // mark as chancellor
               nopts[move] = i; // store index of stack
