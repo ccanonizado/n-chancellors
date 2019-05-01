@@ -66,20 +66,20 @@ int isSafe(int * nopts, int row, int col, int last, int N) {
   return TRUE;
 }
 
-// 1 for chancellor - 0 for blank
+// 1/2 for chancellor - 0 for blank
 void printBoard(int ** option, int N) {
   int i, j;
 
   for(i=1; i<N+1; i++) {
     for(j=1; j<N+1; j++) {
-      printf("%d ", option[i][j]);
+      printf(option[i][j] == 1 || option[i][j] == 2 ? "C " : "0 ");
     }
     printf("\n");
   }
 }
 
 int main() {
-  int N, i, j, k, puzzles, move, last, start, solutions;
+  int N, i, j, k, puzzles, start, move, last, solutions;
   FILE * fp;
 
   fp = fopen("input.txt", "r");
@@ -92,19 +92,53 @@ int main() {
     int * nopts = (int *) malloc(sizeof(int) * (N+2)); // array of top of stacks
     int ** option = (int **) malloc(sizeof(int *) * (N+2)); // array of stacks of options
 
+    // allocate memory for board and initialize nopts
     for(i=0; i<N+2; i++) {
       option[i] = (int *) malloc(sizeof(int) * (N+2));
+      nopts[i] = 0;
     }
+
 
     // copy contents of initial board
     for(i=1; i<N+1; i++) {
       for(j=1; j<N+1; j++) {
         fscanf(fp, "%d", &option[i][j]);
+        
+        // if there is initial chancellor
+        if(option[i][j] == 1) {
+          option[i][j] = 2; // mark as 2 (never remove)
+          nopts[i] = j;  // store top of stack
+        }
       }
     }
 
-    printBoard(option, N);
-  
+    /* FILE READING READY - NOT INTEGRATED WITH ALGO YET
+    start = 0;
+
+    // find start column
+    for(i=1; i<N+1; i++) {
+      for(j=1; j<N+1; j++) {
+        if(option[j][i] == 2) {
+          start = j;
+        }
+      }
+
+      // if there is a gap - start column is found
+      if(start != i) {
+        break;
+      }
+    }
+
+    // initialize variables
+    move = start;
+    last = -1;
+    solutions = 0;
+    if(start == 0) {
+      nopts[start] = 1;
+    }
+
+    */
+
     move = start = solutions = 0;
     nopts[start] = 1;
     last = -1;
@@ -113,6 +147,12 @@ int main() {
     while(nopts[start] > 0) {
 
       if(nopts[move] > 0) {
+
+        // first step
+        if(move == start) {
+          move = 0;
+        }
+
         if(last == -1) {
           move++;
           nopts[move] = 0;
