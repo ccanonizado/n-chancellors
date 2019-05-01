@@ -98,7 +98,6 @@ int main() {
       nopts[i] = 0;
     }
 
-
     // copy contents of initial board
     for(i=1; i<N+1; i++) {
       for(j=1; j<N+1; j++) {
@@ -111,33 +110,6 @@ int main() {
         }
       }
     }
-
-    /* FILE READING READY - NOT INTEGRATED WITH ALGO YET
-    start = 0;
-
-    // find start column
-    for(i=1; i<N+1; i++) {
-      for(j=1; j<N+1; j++) {
-        if(option[j][i] == 2) {
-          start = j;
-        }
-      }
-
-      // if there is a gap - start column is found
-      if(start != i) {
-        break;
-      }
-    }
-
-    // initialize variables
-    move = start;
-    last = -1;
-    solutions = 0;
-    if(start == 0) {
-      nopts[start] = 1;
-    }
-
-    */
 
     move = start = solutions = 0;
     nopts[start] = 1;
