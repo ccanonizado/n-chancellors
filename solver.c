@@ -118,7 +118,7 @@ void printBoard(int ** option, int N) {
 }
 
 int main() {
-  int N, i, j, k, boards, start, move, last, solutions;
+  int N, i, j, k, boards, start, move, last, solutions, * nopts, ** option;
   FILE * fp;
 
   fp = fopen("input4.txt", "r");
@@ -130,8 +130,8 @@ int main() {
     printf("\nSolving Board %d:\n", k+1);
     
     fscanf(fp, "%d", &N);
-    int * nopts = (int *) malloc(sizeof(int) * (N+2)); // array of top of stacks
-    int ** option = (int **) malloc(sizeof(int *) * (N+2)); // array of stacks of options
+    nopts = (int *) malloc(sizeof(int) * (N+2)); // array of top of stacks
+    option = (int **) malloc(sizeof(int *) * (N+2)); // array of stacks of options
 
     // allocate memory for board and initialize nopts
     for(i=0; i<N+2; i++) {
@@ -241,10 +241,16 @@ int main() {
 
           // backtrack
           if(i == N+1) {
-            nopts[move] = 0;
-            move--;
-            option[move][nopts[move]] = 0; // clear chancellor
-            last = nopts[move];
+            if(move == start+1) {
+              break;
+            }
+            
+            else {
+              nopts[move] = 0;
+              move--;
+              option[move][nopts[move]] = 0; // clear chancellor
+              last = nopts[move];
+            }
 
             // ANOTHER BACKTRACK IF THE PREV MOVE EXHAUSTED ALL POSSIBLE CANDIDATES
             if(last == N) {
@@ -279,9 +285,15 @@ int main() {
       printf("NO SOLUTIONS!\n");
     }
 
-  }
-  fclose(fp);
+    // deallocate memory
+    free(nopts);
+    for(i=0; i<N+2; i++) {
+      free(option[i]);
+    }
+    free(option);
   
-
+  }
+  
+  fclose(fp);
   return 0;
 }
