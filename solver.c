@@ -3,8 +3,13 @@
 #define TRUE 1
 #define FALSE 0
 
-int isSafe(int * nopts, int row, int col, int last, int N) {
+int isSafe(int ** option, int * nopts, int row, int col, int last, int N) {
   int i;
+
+  // if initial chancellor - safe but check usage below
+  if(option[row][col] == 2) {
+    return TRUE;
+  }
 
   // if filled before - safe but not allowed
   if(last == col) {
@@ -79,14 +84,16 @@ void printBoard(int ** option, int N) {
 }
 
 int main() {
-  int N, i, j, k, puzzles, start, move, last, solutions;
+  int N, i, j, k, boards, start, move, last, solutions;
   FILE * fp;
 
-  fp = fopen("input.txt", "r");
-  fscanf(fp, "%d", &puzzles);
+  fp = fopen("input4.txt", "r");
+  fscanf(fp, "%d", &boards);
   
   // loop program depending on number of puzzles
-  for(k=0; k<puzzles; k++) {
+  for(k=0; k<boards; k++) {
+
+    printf("\nSolving Board %d:\n", k+1);
     
     fscanf(fp, "%d", &N);
     int * nopts = (int *) malloc(sizeof(int) * (N+2)); // array of top of stacks
@@ -111,9 +118,28 @@ int main() {
       }
     }
 
-    move = start = solutions = 0;
-    nopts[start] = 1;
+    start = 0;
+
+    // find start if there are initial chancellors
+    for(i=1; i<N+1; i++) {
+      for(j=1; j<N+1; j++) {
+        if(option[i][j] == 2) {
+          start = i;
+        }
+      }
+
+      if(start != i) {
+        break;
+      }
+    }
+
+    // initialize variables
     last = -1;
+    move = start;
+    solutions = 0;
+    if(start == 0) {
+      nopts[start] = 1;
+    }
 
     // while dummy stack is not empty
     while(nopts[start] > 0) {
@@ -122,11 +148,19 @@ int main() {
 
         if(last == -1) {
           move++;
-          nopts[move] = 0;
+
+          // initialize as zero if NO initial chancellor
+          if(option[move][nopts[move]] != 2) {
+            nopts[move] = 0;
+          }
         }
 
         else {
-          nopts[move] = 0;
+
+          // initialize as zero if NO initial chancellor
+          if(option[move][nopts[move]] != 2) {
+            nopts[move] = 0;
+          }
         }
         
         // solution found
@@ -137,29 +171,29 @@ int main() {
           printf("\n");
         }
 
-        // initial first chancellor
+        // first chancellor if no initial exists
         else if(move == 1) {
-          if(last == -1) {
-            nopts[move] = 1;
-            option[move][nopts[move]] = 1;
-          }
-          else {
-            nopts[move] = last + 1;
-            option[move][nopts[move]] = 1;
-            last = -1;
+          for(i = last == -1 ? 1 : last; i<N+1; i++) {
+            // check every column of first row
+            if(isSafe(option, nopts, move, i, last, N)) {
+              option[move][i] = 1; // mark as chancellor
+              nopts[move] = i; // store index of stack
+              last = -1;
+            }
           }
         }
 
         // fill other slots of chancellors
         else {
-          if(last == -1) i = 1;
-          else i = last;
-          for(i; i<N+1; i++) {
+          for(i = last == -1 ? 1 : last; i<N+1; i++) {
             // check every column of current row
-            if(isSafe(nopts, move, i, last, N)) {
-              option[move][i] = 1; // mark as chancellor
-              nopts[move] = i; // store index of stack
-              last = -1;
+            if(isSafe(option, nopts, move, i, last, N)) {
+              // only add new chancellor if no initial exists
+              if(option[move][i] != 2) {
+                option[move][i] = 1; // mark as chancellor
+                nopts[move] = i; // store index of stack
+                last = -1;
+              }
               break;
             }
           }
@@ -174,7 +208,7 @@ int main() {
             if(last == N) {
               nopts[move] = 0;
               move--;
-              if(move == 0) nopts[move] = 0;
+              if(move == start) nopts[move] = 0;
               else {
                 option[move][nopts[move]] = 0; // clear chancellor
                 last = nopts[move];
@@ -188,14 +222,16 @@ int main() {
       // backtrack
       else {
         move--;
-        option[move][nopts[move]] = 0; // clear chancellor
-        last = nopts[move];
+        if(option[move][nopts[move]] != 2) {
+          option[move][nopts[move]] = 0; // clear chancellor
+          last = nopts[move];
+        }
       }
     }
-    printf("Blank %dx%d solutions: %d\n", N, N, solutions);
+    printf("Board %d Solutions: %d\n", k+1, solutions);
   }
-
   fclose(fp);
+  
 
   return 0;
 }
