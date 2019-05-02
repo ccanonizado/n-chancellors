@@ -36,10 +36,27 @@ int isSafe(int ** option, int * nopts, int row, int col, int last, int N) {
     }
 
     /*
+      1 0
+      0 0
+      0 x
+    */
+    else if(nopts[i] != 0 && (i+2 == row && nopts[i]+1 == col)) {
+      return FALSE;
+    }
+
+    /*
       0 0 1
       x 0 0
     */
     else if(nopts[i] != 0 && (i+1 == row && nopts[i]-2 == col)) {
+      return FALSE;
+    }
+
+    /*
+      x 0 0
+      0 0 1
+    */
+    else if(nopts[i] != 0 && (i-1 == row && nopts[i]-2 == col)) {
       return FALSE;
     }
 
@@ -52,11 +69,28 @@ int isSafe(int ** option, int * nopts, int row, int col, int last, int N) {
     }
 
     /*
-      1 0
-      0 0
-      0 x
+      0 0 x
+      1 0 0
     */
-    else if(nopts[i] != 0 && (i+2 == row && nopts[i]+1 == col)) {
+    else if(nopts[i] != 0 && (i-1 == row && nopts[i]+2 == col)) {
+      return FALSE;
+    }
+
+    /*
+      x 0
+      0 0
+      0 1
+    */
+    else if(nopts[i] != 0 && (i-2 == row && nopts[i]-1 == col)) {
+      return FALSE;
+    }
+
+    /*
+      0 x
+      0 0
+      1 0
+    */
+    else if(nopts[i] != 0 && (i-2 == row && nopts[i]+1 == col)) {
       return FALSE;
     }
 
@@ -211,6 +245,7 @@ int main() {
             move--;
             option[move][nopts[move]] = 0; // clear chancellor
             last = nopts[move];
+
             // ANOTHER BACKTRACK IF THE PREV MOVE EXHAUSTED ALL POSSIBLE CANDIDATES
             if(last == N) {
               nopts[move] = 0;
@@ -235,7 +270,15 @@ int main() {
         }
       }
     }
-    printf("Board %d Solutions: %d\n", k+1, solutions);
+
+    if (solutions != 0) {
+      printf("Board %d Solutions: %d\n", k+1, solutions);
+    }
+
+    else {
+      printf("NO SOLUTIONS!\n");
+    }
+
   }
   fclose(fp);
   
