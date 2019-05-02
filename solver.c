@@ -133,9 +133,16 @@ int main() {
     nopts = (int *) malloc(sizeof(int) * (N+2)); // array of top of stacks
     option = (int **) malloc(sizeof(int *) * (N+2)); // array of stacks of options
 
-    // allocate memory for board and initialize nopts
+    // allocate memory for board
     for(i=0; i<N+2; i++) {
       option[i] = (int *) malloc(sizeof(int) * (N+2));
+    }
+
+    // initialize option and nopts
+    for(i=0; i<N+2; i++) {
+      for(j=0; j<N+2; j++) {
+        option[i][j] = 0;
+      }
       nopts[i] = 0;
     }
 
@@ -212,18 +219,6 @@ int main() {
           printf("\n");
         }
 
-        // first chancellor if no initial exists
-        else if(move == 1) {
-          for(i = last == -1 ? 1 : last; i<N+1; i++) {
-            // check every column of first row
-            if(isSafe(option, nopts, move, i, last, N)) {
-              option[move][i] = 1; // mark as chancellor
-              nopts[move] = i; // store index of stack
-              last = -1;
-            }
-          }
-        }
-
         // fill other slots of chancellors
         else {
           for(i = last == -1 ? 1 : last; i<N+1; i++) {
@@ -244,24 +239,28 @@ int main() {
             if(move == start+1) {
               break;
             }
-            
+
             else {
               nopts[move] = 0;
               move--;
               option[move][nopts[move]] = 0; // clear chancellor
               last = nopts[move];
+
+              if(move == start) nopts[move] = 0;
+              
+              // ANOTHER BACKTRACK IF THE PREV MOVE EXHAUSTED ALL POSSIBLE CANDIDATES
+              if(last == N) {
+                nopts[move] = 0;
+                move--;
+                if(move == start) nopts[move] = 0;
+                else {
+                  option[move][nopts[move]] = 0; // clear chancellor
+                  last = nopts[move];
+                }
+              }
+
             }
 
-            // ANOTHER BACKTRACK IF THE PREV MOVE EXHAUSTED ALL POSSIBLE CANDIDATES
-            if(last == N) {
-              nopts[move] = 0;
-              move--;
-              if(move == start) nopts[move] = 0;
-              else {
-                option[move][nopts[move]] = 0; // clear chancellor
-                last = nopts[move];
-              }
-            }
           }
 
         }
@@ -270,6 +269,13 @@ int main() {
       // backtrack
       else {
         move--;
+        while(1) {
+          if(option[move][nopts[move]] == 2) {
+            move--;
+          } 
+          else
+            break;
+        }
         if(option[move][nopts[move]] != 2) {
           option[move][nopts[move]] = 0; // clear chancellor
           last = nopts[move];
