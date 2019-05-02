@@ -112,8 +112,15 @@ int main() {
         
         // if there is initial chancellor
         if(option[i][j] == 1) {
-          option[i][j] = 2; // mark as 2 (never remove)
-          nopts[i] = j;  // store top of stack
+          if(isSafe(option, nopts, i, j, 0, N)) {
+            option[i][j] = 2; // mark as 2 (never remove)
+            nopts[i] = j;  // store top of stack
+          }
+          else {
+            // initial chancellor placed is invalid
+            printf("NO SOLUTION!\n");
+            return 0;
+          }
         }
       }
     }
@@ -149,7 +156,7 @@ int main() {
         if(last == -1) {
           move++;
 
-          // initialize as zero if NO initial chancellor
+          // put zero if NO initial chancellor
           if(option[move][nopts[move]] != 2) {
             nopts[move] = 0;
           }
@@ -157,7 +164,7 @@ int main() {
 
         else {
 
-          // initialize as zero if NO initial chancellor
+          // put zero if NO initial chancellor
           if(option[move][nopts[move]] != 2) {
             nopts[move] = 0;
           }
