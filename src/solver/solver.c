@@ -105,13 +105,13 @@ int main() {
   int N, i, j, k, boards, start, move, last, solutions, * nopts, ** option;
   FILE * fp;
 
-  fp = fopen("input.txt", "r");
+  fp = fopen("solver_input.txt", "r");
   fscanf(fp, "%d", &boards);
   
   // loop program depending on number of puzzles
   for(k=0; k<boards; k++) {
 
-    printf("Solving Board %d:\n", k+1);
+    // printf("Solving Board %d:\n", k+1);
     
     fscanf(fp, "%d", &N);
     nopts = (int *) malloc(sizeof(int) * (N+2)); // array of top of stacks
@@ -142,7 +142,8 @@ int main() {
           }
           else {
             // initial chancellor placed is invalid
-            printf("NO SOLUTION FOR THIS (%dx%d) BOARD:\n", N, N);
+            printf("NO SOLUTION\n");
+            // printf("NO SOLUTION FOR THIS (%dx%d) BOARD:\n", N, N);
             printBoard(option, N);
             printf("==============================\n");
             return 0;
@@ -193,7 +194,7 @@ int main() {
         // solution found
         if(move == N+1) {
           solutions++;
-          printf("Solution Found!\n");
+          // printf("Solution Found!\n");
           printBoard(option, N);
           printf("\n");
         }
@@ -288,14 +289,16 @@ int main() {
     }
 
     if (solutions != 0) {
-      printf("Board %d Solutions (%dx%d): %d\n", k+1, N, N, solutions);
-      printf("==============================\n");
+      printf("%d\n", solutions);
+      // printf("Board %d Solutions (%dx%d): %d\n", k+1, N, N, solutions);
+      // printf("==============================\n");
     }
 
     else {
-      printf("NO SOLUTION FOR THIS (%dx%d) BOARD:\n", N, N);
+      // printf("NO SOLUTION FOR THIS (%dx%d) BOARD:\n", N, N);
+      printf("NO SOLUTION\n");
       printBoard(option, N);
-      printf("==============================\n");
+      // printf("==============================\n");
     }
 
     // deallocate memory

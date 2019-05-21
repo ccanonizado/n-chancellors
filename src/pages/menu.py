@@ -11,9 +11,9 @@ class Menu:
     def __init__(self, game):
         self.game = game
 
-        guide = Button('guide', 120, 590, 300, 100)
-        play = Button('play', 475, 550, 300, 100)
-        about = Button('about', 815, 590, 300, 100)
+        guide = Button('guide', 120, 590, 267, 78)
+        play = Button('play', 475, 550, 267, 78)
+        about = Button('about', 815, 590, 267, 78)
 
         while self.game.status == MENU:
             self.game.screen.blit(MENU_BG, ORIGIN)

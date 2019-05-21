@@ -1,9 +1,22 @@
-import pygame as pg
+'''
+This is the main game file!
 
+All the other classes are distributed in the different directories:
+- /src/ui - Button.py, Tile.py
+- /src/pages/ - menu.py, play.py, solution.py 
+
+Other classes used in this directory are:
+- settings.py for all the configurations needed
+- images.py for all the photos imported
+
+'''
+
+import pygame as pg
 
 # import pages
 from pages.menu import Menu
 from pages.play import Play
+from pages.solution import Solution
 
 from settings import *
 
@@ -15,6 +28,7 @@ class Game:
         pg.display.set_caption(TITLE)
     
         self.screen = pg.display.set_mode(BG_SIZE)
+        self.init = False # Check if game has started
         self.running = True
         self.status = MENU
 
@@ -25,23 +39,21 @@ class Game:
             Menu(self)
         elif self.status == PLAY:
             Play(self)
-
+        elif self.status == SOLUTION:
+            Solution(self)
 
         self.events()
         pg.display.flip()
 
     def events(self):
         try:
-            keys = pg.key.get_pressed()
-
+            # Get all events
             for event in pg.event.get():
                 # check for closing window
                 if event.type == pg.QUIT:                    
                     print("You quit the game!")
-
                     self.running = False
                     quit()
-
         except:
             quit()
 
