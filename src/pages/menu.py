@@ -17,7 +17,7 @@ class Menu:
 
         while self.game.status == MENU:
             self.game.screen.blit(MENU_BG, ORIGIN)
-
+            # Get all events
             for event in pg.event.get():
                 pos = pg.mouse.get_pos()
 
@@ -26,8 +26,9 @@ class Menu:
                     self.game.running = False
                     quit()
                 
-                # # mouse click
+                # mouse click
                 if event.type == pg.MOUSEBUTTONDOWN:
+                    # change screens on mouse click
                     if play.isOver(pos):
                         self.game.status = PLAY
                     elif guide.isOver(pos):
@@ -41,6 +42,7 @@ class Menu:
                     guide.isOver(pos)
                     about.isOver(pos)
 
+            # Place loaded elements
             self.game.screen.blit(play.image, (play.x, play.y))
             self.game.screen.blit(guide.image, (guide.x, guide.y))
             self.game.screen.blit(about.image, (about.x, about.y))

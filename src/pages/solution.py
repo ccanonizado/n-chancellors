@@ -20,7 +20,7 @@ class Solution:
         self.input_current_solution = ''
         self.input_box_active = False
         # Create rec where input will be displayed
-        self.input_box = pg.Rect(180, 550, 140, 38)
+        self.input_box = pg.Rect(178, 550, 140, 38)
 
         home = Button('home', 50, 45, 63, 63)
         back_btn = Button('back', 55, 330, 55, 55)
@@ -131,7 +131,7 @@ class Solution:
         # write board size
         f.write(str(self.solution_board_size)+'\n')
         
-        # iterate through current board and append to array of images to display
+        # iterate through current board and write the board in file
         for row in range(self.solution_board_size):
             for col in range(self.solution_board_size):
                 f.write(self.game.boards[self.game.current_board][row][col] + ' ')
