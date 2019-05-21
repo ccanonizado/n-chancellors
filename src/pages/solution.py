@@ -142,7 +142,7 @@ class Solution:
     def getSolution(self):
         # PARSE OUTPUT OF SOLVER
         #  Run solver on  the current board then parse the output
-        command = "solver.exe"
+        command = "./solver/solver" # ./solver/solver = MAC | solver.exe = WINDOWS
         result = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).communicate()[0]
         
         # convert result to ascii
