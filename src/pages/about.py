@@ -14,7 +14,7 @@ class About:
 
         home = Button('home', 50, 45, 63, 63)
 
-        while self.game.status == MENU:
+        while self.game.status == ABOUT:
             self.game.screen.blit(self.bg, ORIGIN)
 
             for event in pg.event.get():

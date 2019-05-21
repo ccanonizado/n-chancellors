@@ -34,7 +34,6 @@ class Menu:
                         self.game.status = PLAY
                     elif guide.isOver(pos):
                         self.game.status = GUIDE
-                        print("HELLO")
                     elif about.isOver(pos):
                         self.game.status = ABOUT
 
