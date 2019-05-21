@@ -65,9 +65,18 @@ class Play:
                         if self.game.boards: # if input boards are not empty
                             self.game.current_board = (self.game.current_board - 1) % len(self.game.boards)
                             self.displayBoard()
-                    # iterate through entire current display
 
+                    # iterate through entire current display
                     # if user clicks on tile, toggle tile chancy image
+                    if self.game.board_lengths:
+                        for row in range(self.game.board_lengths[self.game.current_board]):
+                            for col in range(self.game.board_lengths[self.game.current_board]):
+                                if self.game.board_images[row][col].isOver(pos):
+                                    if self.game.boards[self.game.current_board][row][col] == '1':
+                                        self.game.boards[self.game.current_board][row][col] = '0'
+                                    else:
+                                        self.game.boards[self.game.current_board][row][col] = '1'
+                                    self.displayBoard()
 
 
                 # mouse hover
