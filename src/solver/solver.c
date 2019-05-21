@@ -166,6 +166,15 @@ int main() {
         break;
     }
 
+    if(start == N) {
+      // all slots filled
+      printf("NO SOLUTION\n");
+      // printf("NO SOLUTION FOR THIS (%dx%d) BOARD:\n", N, N);
+      printBoard(option, N);
+      printf("==============================\n");
+      return 0;
+    }
+
     // initialize variables
     last = -1;
     move = start;

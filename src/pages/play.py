@@ -16,18 +16,28 @@ class Play:
         # if game has not started, initialize variables
         if (self.game.init == 0):
             self.game.current_board = 0  # Current board being diplayed
-            self.game.boards = []
-            self.game.board_lengths = [] # Array containing sizes of the boards 
+            self.game.boards = [    # initialize empty array for player to interact with
+                [
+                    ['0','0','0','0','0','0','0','0'],
+                    ['0','0','0','0','0','0','0','0'],
+                    ['0','0','0','0','0','0','0','0'],
+                    ['0','0','0','0','0','0','0','0'],
+                    ['0','0','0','0','0','0','0','0'],
+                    ['0','0','0','0','0','0','0','0'],
+                    ['0','0','0','0','0','0','0','0'],
+                    ['0','0','0','0','0','0','0','0']
+                ]
+            ]
+            self.game.board_lengths = [8] # Array containing sizes of the boards 
             self.game.board_images = [] # Array of images to be displayed
             self.game.init = 1
 
         home = Button('home', 50, 45, 63, 63)
         fileread = Button('readfile', 50, 190, 315, 61)
-        addboard = Button('addboard', 50, 300, 315, 61)
-        solve = Button('solve', 50, 435, 217, 61)
-        back_btn = Button('back', 50, 570, 55, 55)
-        next_btn = Button('next', 380, 570, 55, 55)
-
+        solve = Button('solve', 50, 350, 217, 61)
+        back_btn = Button('back', 50, 511, 55, 55)
+        next_btn = Button('next', 380, 511, 55, 55)
+        self.displayBoard()
         while self.game.status == PLAY:
             self.game.screen.blit(self.bg, ORIGIN)
 
@@ -73,17 +83,38 @@ class Play:
                             for col in range(self.game.board_lengths[self.game.current_board]):
                                 if self.game.board_images[row][col].isOver(pos):
                                     if self.game.boards[self.game.current_board][row][col] == '1':
+                                        self.game.board_images[row][col].isChancy = False
+                                        if(row % 2 == 0):
+                                            if(col % 2 == 0):
+                                                self.game.board_images[row][col].image = pg.image.load('./images/game/white_tile.png')
+                                            else:
+                                                self.game.board_images[row][col].image = pg.image.load('./images/game/blue_tile.png')
+                                        else:
+                                            if(col % 2 == 0):
+                                                self.game.board_images[row][col].image = pg.image.load('./images/game/blue_tile.png')
+                                            else:
+                                                self.game.board_images[row][col].image = pg.image.load('./images/game/white_tile.png')
                                         self.game.boards[self.game.current_board][row][col] = '0'
                                     else:
+                                        self.game.board_images[row][col].isChancy = True
+                                        if(row % 2 == 0):
+                                            if(col % 2 == 0):
+                                                self.game.board_images[row][col].image = pg.image.load('./images/game/white_tile_chancy.png')
+                                            else:
+                                                self.game.board_images[row][col].image = pg.image.load('./images/game/blue_tile_chancy.png')
+                                        else:
+                                            if(col % 2 == 0):
+                                                self.game.board_images[row][col].image = pg.image.load('./images/game/blue_tile_chancy.png')
+                                            else:
+                                                self.game.board_images[row][col].image = pg.image.load('./images/game/white_tile_chancy.png')
                                         self.game.boards[self.game.current_board][row][col] = '1'
-                                    self.displayBoard()
+                                    # self.displayBoard()
 
 
                 # mouse hover
                 if event.type == pg.MOUSEMOTION:
                     home.isOver(pos)
                     fileread.isOver(pos)
-                    addboard.isOver(pos)
                     solve.isOver(pos)
                     back_btn.isOver(pos)
                     next_btn.isOver(pos)
@@ -91,11 +122,10 @@ class Play:
             # Display loaded elements
             self.game.screen.blit(home.image, (home.x, home.y))
             self.game.screen.blit(fileread.image, (fileread.x, fileread.y))
-            self.game.screen.blit(addboard.image, (addboard.x, addboard.y))
             self.game.screen.blit(solve.image, (solve.x, solve.y))
             self.game.screen.blit(back_btn.image, (back_btn.x, back_btn.y))
             self.game.screen.blit(next_btn.image, (next_btn.x, next_btn.y))
-            self.game.screen.blit(BOARD_LABEL, (152, 575))
+            self.game.screen.blit(BOARD_LABEL, (150, 518))
 
             # Display current board number if board not empty
             if self.game.boards:
@@ -103,7 +133,7 @@ class Play:
                 myfont = pg.font.SysFont('Big John', 36)
                 currentboard = '%d/%d' % (self.game.current_board + 1, len(self.game.boards))
                 textsurface = myfont.render(currentboard, True, (1, 1, 1))
-                self.game.screen.blit(textsurface,(210,640))
+                self.game.screen.blit(textsurface,(205,585))
 
             # Display current board
             if self.game.board_lengths:
