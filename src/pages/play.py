@@ -11,6 +11,8 @@ from images import *
 class Play:
     def __init__(self, game):
         self.game = game
+        self.bg = PLAY_BG.convert()
+
         # if game has not started, initialize variables
         if (self.game.init == 0):
             self.game.current_board = 0  # Current board being diplayed
@@ -27,7 +29,7 @@ class Play:
         next_btn = Button('next', 380, 570, 55, 55)
 
         while self.game.status == PLAY:
-            self.game.screen.blit(PLAY_BG, ORIGIN)
+            self.game.screen.blit(self.bg, ORIGIN)
 
             # get all events
             for event in pg.event.get():

@@ -16,6 +16,8 @@ import pygame as pg
 # import pages
 from pages.menu import Menu
 from pages.play import Play
+from pages.guide import Guide
+from pages.about import About
 from pages.solution import Solution
 
 from settings import *
@@ -31,7 +33,6 @@ class Game:
         self.init = False # Check if game has started
         self.running = True
         self.status = MENU
-
         
     def run(self):
         # Switch page screens
@@ -39,6 +40,10 @@ class Game:
             Menu(self)
         elif self.status == PLAY:
             Play(self)
+        elif self.status == GUIDE:
+            Guide(self)
+        elif self.status == ABOUT:
+            About(self)
         elif self.status == SOLUTION:
             Solution(self)
 
@@ -56,7 +61,6 @@ class Game:
                     quit()
         except:
             quit()
-
 
 game = Game()
 

@@ -7,14 +7,12 @@ from ui.Button import Button
 from settings import *
 from images import *
 
-class Menu:
+class Guide:
     def __init__(self, game):
         self.game = game
-        self.bg = MENU_BG.convert()
+        self.bg = GUIDE_BG.convert()
 
-        guide = Button('guide', 120, 590, 267, 78)
-        play = Button('play', 475, 550, 267, 78)
-        about = Button('about', 815, 590, 267, 78)
+        home = Button('home', 50, 45, 63, 63)
 
         while self.game.status == MENU:
             self.game.screen.blit(self.bg, ORIGIN)
@@ -30,23 +28,14 @@ class Menu:
                 # mouse click
                 if event.type == pg.MOUSEBUTTONDOWN:
                     # change screens on mouse click
-                    if play.isOver(pos):
-                        self.game.status = PLAY
-                    elif guide.isOver(pos):
-                        self.game.status = GUIDE
-                        print("HELLO")
-                    elif about.isOver(pos):
-                        self.game.status = ABOUT
+                    if home.isOver(pos):
+                        self.game.status = MENU
 
                 # mouse hover
                 if event.type == pg.MOUSEMOTION:
-                    play.isOver(pos)
-                    guide.isOver(pos)
-                    about.isOver(pos)
+                    home.isOver(pos)
 
             # place loaded elements
-            self.game.screen.blit(play.image, (play.x, play.y))
-            self.game.screen.blit(guide.image, (guide.x, guide.y))
-            self.game.screen.blit(about.image, (about.x, about.y))
+            self.game.screen.blit(home.image, (home.x, home.y))
 
             pg.display.flip()

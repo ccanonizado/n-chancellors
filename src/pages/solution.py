@@ -12,6 +12,7 @@ from images import *
 class Solution:
     def __init__(self, game):
         self.game = game
+        self.bg = PLAY_BG.convert()
         self.solution_board_size = self.game.board_lengths[self.game.current_board]
         self.solution_boards = [] # initialize 3d array to contain solutions
         self.solution_images = [] # images to contain current solution
@@ -34,7 +35,7 @@ class Solution:
             self.displaySolution()
 
         while self.game.status == SOLUTION:
-            self.game.screen.blit(PLAY_BG, ORIGIN)
+            self.game.screen.blit(self.bg, ORIGIN)
 
             # get all events
             for event in pg.event.get():

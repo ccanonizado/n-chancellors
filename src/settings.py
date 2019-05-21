@@ -1,4 +1,4 @@
-# Page statuses
+# page status
 MENU = 1
 PLAY = 2
 GUIDE = 3
