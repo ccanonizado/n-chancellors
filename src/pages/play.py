@@ -101,7 +101,7 @@ class Play:
             if self.game.boards:
                 pg.font.init()
                 myfont = pg.font.SysFont('Big John', 36)
-                currentboard = '%d/%d' % (self.game.current_board, len(self.game.boards)-1)
+                currentboard = '%d/%d' % (self.game.current_board + 1, len(self.game.boards))
                 textsurface = myfont.render(currentboard, True, (1, 1, 1))
                 self.game.screen.blit(textsurface,(210,640))
 
@@ -155,29 +155,28 @@ class Play:
         # Depending on the board size, the starting points will be different
         # 3 x 3
         if (self.game.board_lengths[self.game.current_board] == 3):
-            start_x = 755
-            start_y = 220
+            start_x = 740
+            start_y = 268
         # 4 x 4
         elif (self.game.board_lengths[self.game.current_board] == 4):
-            start_x = 720
-            start_y = 185
+            start_x = 705
+            start_y = 230
         # 5 x 5
         elif (self.game.board_lengths[self.game.current_board] == 5):
-            start_x = 680
-            start_y = 150
+            start_x = 670
+            start_y = 195
         # 6 x 6
         elif (self.game.board_lengths[self.game.current_board] == 6):
-            start_x = 647
-            start_y = 102
+            start_x = 630
+            start_y = 150
         # 7 x 7
         elif (self.game.board_lengths[self.game.current_board] == 7):
-            start_x = 612
-            start_y = 80
+            start_x = 600
+            start_y = 125
         # 8 x 8
         elif (self.game.board_lengths[self.game.current_board] == 8):
-            start_x = 576
-            start_y = 30
-
+            start_x = 565
+            start_y = 80
 
         # Board size of current board
         board_size = self.game.board_lengths[self.game.current_board]
@@ -204,7 +203,8 @@ class Play:
             itr_x = 0
             itr_y += 71 # move y to adjust print
             image_row = [] #empty array for new row
-            # Change tile color per row
-            tile_type = 'blue_tile' if tile_type == 'white_tile' else 'white_tile'
+            # Change tile color again if board size is even
+            if(board_size % 2 == 0):
+                tile_type = 'blue_tile' if tile_type == 'white_tile' else 'white_tile'
 
         pg.display.update()

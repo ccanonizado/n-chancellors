@@ -18,12 +18,13 @@ class Solution:
         self.solution_images = [] # images to contain current solution
         self.current_solution = 0
         self.number_of_solutions = 0
+        self.no_solutions = False
         self.input_current_solution = ''
         self.input_box_active = False
         # Create rec where input will be displayed
         self.input_box = pg.Rect(178, 550, 140, 38)
 
-        home = Button('home', 50, 45, 63, 63)
+        back_btn2 = Button('back_soln', 50, 45, 63, 63)
         back_btn = Button('back', 55, 330, 55, 55)
         next_btn = Button('next', 440, 330, 55, 55)
         
@@ -50,7 +51,7 @@ class Solution:
                 
                 # mouse click
                 if event.type == pg.MOUSEBUTTONDOWN:
-                    if home.isOver(pos):
+                    if back_btn2.isOver(pos):
                         self.game.status = PLAY
                     # Display next board
                     elif next_btn.isOver(pos):
@@ -85,7 +86,9 @@ class Solution:
 
                 # mouse hover
                 if event.type == pg.MOUSEMOTION:
-                    home.isOver(pos)
+                    back_btn2.isOver(pos)
+                    back_btn.isOver(pos)
+                    next_btn.isOver(pos)
 
             # Display current board number if solutions were found
             if self.solution_boards:
@@ -107,19 +110,23 @@ class Solution:
                 pg.draw.rect(self.game.screen, pg.Color('white'), self.input_box, 2)
             
             # Display loaded elements
-            self.game.screen.blit(home.image, (home.x, home.y))
-            self.game.screen.blit(SOLUTIONS_LABEL, (130, 340))
-            self.game.screen.blit(INPUT_SOLN_LABEL, (104, 500))
-            self.game.screen.blit(back_btn.image, (back_btn.x, back_btn.y))
-            self.game.screen.blit(next_btn.image, (next_btn.x, next_btn.y))
+            self.game.screen.blit(back_btn2.image, (back_btn2.x, back_btn2.y))
             
             # Display current solution board
             if self.solution_boards:
                 for row in range(self.solution_board_size):
                     for col in range(self.solution_board_size):
                         self.game.screen.blit(self.solution_images[row][col].image, (self.solution_images[row][col].x, self.solution_images[row][col].y))
-            self.game.screen.blit(SOLUTIONS_HEADER, (640, 40))
-
+            # Check if solutions were found
+            if not self.no_solutions:
+                self.game.screen.blit(SOLUTIONS_LABEL, (130, 340))
+                self.game.screen.blit(INPUT_SOLN_LABEL, (104, 500))
+                self.game.screen.blit(back_btn.image, (back_btn.x, back_btn.y))
+                self.game.screen.blit(next_btn.image, (next_btn.x, next_btn.y))
+                self.game.screen.blit(SOLUTIONS_HEADER, (625, 40))
+            # if no solutions were found, show no solutions label
+            else: 
+                self.game.screen.blit(NO_SOLUTIONS_LABEL, (143, 320))
             pg.display.flip()
 
     def writeSolution(self):
@@ -143,11 +150,13 @@ class Solution:
     def getSolution(self):
         # PARSE OUTPUT OF SOLVER
         #  Run solver on  the current board then parse the output
-        command = "./solver/solver" # ./solver/solver = MAC | solver.exe = WINDOWS
+        command = "solver.exe" # ./solver/solver = MAC | solver.exe = WINDOWS
         result = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).communicate()[0]
         
         # convert result to ascii
         result = result.decode('ascii')
+
+        print()
 
         # remove \n and \r from the string
         result = result.split('\n')
@@ -156,6 +165,7 @@ class Solution:
         
         # check if there is a solution
         if(result[0] == "NO SOLUTION"):
+            self.no_solutions = True
             return False
 
         # Remove empty strings
@@ -192,27 +202,27 @@ class Solution:
         # 3 x 3
         if (self.solution_board_size == 3):
             start_x = 740
-            start_y = 278
+            start_y = 268
         # 4 x 4
         elif (self.solution_board_size == 4):
             start_x = 705
-            start_y = 240
+            start_y = 230
         # 5 x 5
         elif (self.solution_board_size == 5):
             start_x = 670
-            start_y = 205
+            start_y = 195
         # 6 x 6
         elif (self.solution_board_size == 6):
             start_x = 630
-            start_y = 160
+            start_y = 150
         # 7 x 7
         elif (self.solution_board_size == 7):
             start_x = 600
-            start_y = 135
+            start_y = 125
         # 8 x 8
         elif (self.solution_board_size == 8):
             start_x = 565
-            start_y = 90
+            start_y = 80
         
         # will be added for tile spacing
         itr_x = 0
@@ -237,7 +247,8 @@ class Solution:
             itr_y += 71 # move y to adjust print
             image_row = [] #empty array for new row
 
-            # Change tile color per row
-            tile_type = 'blue_tile' if tile_type == 'white_tile' else 'white_tile'
+            # Change tile color again if board size is even
+            if(self.solution_board_size % 2 == 0):
+                tile_type = 'blue_tile' if tile_type == 'white_tile' else 'white_tile'
 
         pg.display.update()
