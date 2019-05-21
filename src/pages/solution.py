@@ -21,7 +21,7 @@ class Solution:
         self.no_solutions = False
         self.input_current_solution = ''
         self.input_box_active = False
-        # Create rec where input will be displayed
+        # create rec where input will be displayed
         self.input_box = pg.Rect(178, 550, 140, 38)
 
         back_btn2 = Button('back_soln', 50, 45, 63, 63)
@@ -43,7 +43,7 @@ class Solution:
                 # Get mouse position
                 pos = pg.mouse.get_pos()
 
-                # Player presses exit
+                # player presses exit
                 if event.type == pg.QUIT:
                     print("You quit the game!")
                     self.game.running = False
@@ -53,20 +53,20 @@ class Solution:
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if back_btn2.isOver(pos):
                         self.game.status = PLAY
-                    # Display next board
+                    # display next board
                     elif next_btn.isOver(pos):
                         if self.solution_boards: # if input boards are not empty
                             self.current_solution = (self.current_solution + 1) % self.number_of_solutions
                             self.displaySolution()
-                    # Display previous board
+                    # display previous board
                     elif back_btn.isOver(pos):
                         if self.solution_boards: # if input boards are not empty
                             self.current_solution = (self.current_solution - 1) % self.number_of_solutions
                             self.displaySolution()
                     
-                    # If the user clicked on the input_box rect.
+                    # if the user clicked on the input_box rect.
                     if self.input_box.collidepoint(event.pos):
-                        # Toggle the active variable.
+                        # toggle the active variable.
                         self.input_box_active = not self.input_box_active
                     else:
                         self.input_box_active = False
@@ -74,7 +74,7 @@ class Solution:
                 # if input box is used
                 elif event.type == pg.KEYDOWN:
                         if event.key == pg.K_RETURN:
-                            # Check if inputted solution number is within range
+                            # check if inputted solution number is within range
                             if( (int(self.input_current_solution) <= self.number_of_solutions) and (int(self.input_current_solution) > 0)):
                                 self.current_solution = int(self.input_current_solution)-1
                                 self.displaySolution()
@@ -90,34 +90,34 @@ class Solution:
                     back_btn.isOver(pos)
                     next_btn.isOver(pos)
 
-            # Display current board number if solutions were found
+            # display current board number if solutions were found
             if self.solution_boards:
-                # Display current solution
+                # display current solution
                 pg.font.init()
                 font = pg.font.SysFont('Big John', 36)
                 currentboard = '%d/%d' % (self.current_solution+1,self.number_of_solutions)
                 textsurface = font.render(currentboard, True, (1, 1, 1))
                 self.game.screen.blit(textsurface,(230,410))
                 
-                # Display the user input text field for solution
+                # display the user input text field for solution
                 txt_surface = font.render(self.input_current_solution, True, pg.Color('black'))
-                # Resize the box if the text is too long.
+                # resize the box if the text is too long.
                 width = max(200, txt_surface.get_width()+10)
                 self.input_box.w = width
-                # Blit the text.
+                # blit the text.
                 self.game.screen.blit(txt_surface, (self.input_box.x+5, self.input_box.y+5))
-                # Blit the input_box rect.
+                # blit the input_box rect.
                 pg.draw.rect(self.game.screen, pg.Color('white'), self.input_box, 2)
             
-            # Display loaded elements
+            # display loaded elements
             self.game.screen.blit(back_btn2.image, (back_btn2.x, back_btn2.y))
             
-            # Display current solution board
+            # display current solution board
             if self.solution_boards:
                 for row in range(self.solution_board_size):
                     for col in range(self.solution_board_size):
                         self.game.screen.blit(self.solution_images[row][col].image, (self.solution_images[row][col].x, self.solution_images[row][col].y))
-            # Check if solutions were found
+            # check if solutions were found
             if not self.no_solutions:
                 self.game.screen.blit(SOLUTIONS_LABEL, (130, 340))
                 self.game.screen.blit(INPUT_SOLN_LABEL, (104, 500))
@@ -148,8 +148,8 @@ class Solution:
         f.close()
 
     def getSolution(self):
-        # PARSE OUTPUT OF SOLVER
-        #  Run solver on  the current board then parse the output
+        # parse output of solver
+        # run solver on  the current board then parse the output
         command = "solver.exe" # ./solver/solver = MAC | solver.exe = WINDOWS
         result = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).communicate()[0]
         
@@ -168,10 +168,10 @@ class Solution:
             self.no_solutions = True
             return False
 
-        # Remove empty strings
+        # remove empty strings
         result = list(filter(None, result))
 
-        # Get number of solutions (last line of output)
+        # get number of solutions (last line of output)
         self.number_of_solutions = int(result[len(result)-1])
 
         # remove number of solutons from solutions array
@@ -190,15 +190,15 @@ class Solution:
             new_solution_board = []
         return True
     
-    # Display current solution
+    # display current solution
     def displaySolution(self):
-        # Empty board_images array
+        # empty board_images array
         self.solution_images = []
 
         image_row = [] # initialize row of images to be pushed
         
         # x and y position where the board will start generating
-        # Depending on the board size, the starting points will be different
+        # depending on the board size, the starting points will be different
         # 3 x 3
         if (self.solution_board_size == 3):
             start_x = 740
@@ -228,18 +228,18 @@ class Solution:
         itr_x = 0
         itr_y = 0
 
-        # Initial tile type
+        # initial tile type
         tile_type = 'white_tile'
 
         # iterate through current board and append to array of images to display
         for row in range(self.solution_board_size):
             for col in range(self.solution_board_size):
-                # Check if tile has a chancellor
+                # check if tile has a chancellor
                 if self.solution_boards[self.current_solution][row][col] == 'C':
                     image_row.append(Tile(tile_type+'_chancy', True, start_x+itr_x, start_y+itr_y, 70, 71))
                 else:
                     image_row.append(Tile(tile_type, False, start_x+itr_x, start_y+itr_y, 70, 71))
-                # Change tile color per col
+                # change tile color per col
                 tile_type = 'blue_tile' if tile_type == 'white_tile' else 'white_tile'
                 itr_x += 70 # move x to adjust print
             self.solution_images.append(image_row)
@@ -247,7 +247,7 @@ class Solution:
             itr_y += 71 # move y to adjust print
             image_row = [] #empty array for new row
 
-            # Change tile color again if board size is even
+            # change tile color again if board size is even
             if(self.solution_board_size % 2 == 0):
                 tile_type = 'blue_tile' if tile_type == 'white_tile' else 'white_tile'
 

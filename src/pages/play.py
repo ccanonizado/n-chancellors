@@ -15,7 +15,7 @@ class Play:
 
         # if game has not started, initialize variables
         if (self.game.init == 0):
-            self.game.current_board = 0  # Current board being diplayed
+            self.game.current_board = 0  # current board being diplayed
             self.game.boards = [    # initialize empty array for player to interact with
                 [
                     ['0','0','0','0','0','0','0','0'],
@@ -28,8 +28,8 @@ class Play:
                     ['0','0','0','0','0','0','0','0']
                 ]
             ]
-            self.game.board_lengths = [8] # Array containing sizes of the boards 
-            self.game.board_images = [] # Array of images to be displayed
+            self.game.board_lengths = [8] # array containing sizes of the boards 
+            self.game.board_images = [] # array of images to be displayed
             self.game.init = 1
 
         home = Button('home', 50, 45, 63, 63)
@@ -43,10 +43,10 @@ class Play:
 
             # get all events
             for event in pg.event.get():
-                # Get mouse position
+                # get mouse position
                 pos = pg.mouse.get_pos()
 
-                # Player presses exit
+                # player presses exit
                 if event.type == pg.QUIT:
                     print("You quit the game!")
                     self.game.running = False
@@ -64,13 +64,13 @@ class Play:
                             # go to solution of current board
                             self.game.status = SOLUTION
                             
-                    # Display next board
+                    # display next board
                     elif next_btn.isOver(pos):
                         if self.game.boards: # if input boards are not empty
                             self.game.current_board = (self.game.current_board + 1) % len(self.game.boards)
                             self.displayBoard()
                             
-                    # Display previous board
+                    # display previous board
                     elif back_btn.isOver(pos):
                         if self.game.boards: # if input boards are not empty
                             self.game.current_board = (self.game.current_board - 1) % len(self.game.boards)
@@ -108,7 +108,6 @@ class Play:
                                             else:
                                                 self.game.board_images[row][col].image = pg.image.load('./images/game/white_tile_chancy.png')
                                         self.game.boards[self.game.current_board][row][col] = '1'
-                                    # self.displayBoard()
 
 
                 # mouse hover
@@ -119,7 +118,7 @@ class Play:
                     back_btn.isOver(pos)
                     next_btn.isOver(pos)
 
-            # Display loaded elements
+            # display loaded elements
             self.game.screen.blit(home.image, (home.x, home.y))
             self.game.screen.blit(fileread.image, (fileread.x, fileread.y))
             self.game.screen.blit(solve.image, (solve.x, solve.y))
@@ -127,7 +126,7 @@ class Play:
             self.game.screen.blit(next_btn.image, (next_btn.x, next_btn.y))
             self.game.screen.blit(BOARD_LABEL, (150, 518))
 
-            # Display current board number if board not empty
+            # display current board number if board not empty
             if self.game.boards:
                 pg.font.init()
                 myfont = pg.font.SysFont('Big John', 36)
@@ -135,54 +134,45 @@ class Play:
                 textsurface = myfont.render(currentboard, True, (1, 1, 1))
                 self.game.screen.blit(textsurface,(205,585))
 
-            # Display current board
+            # display current board
             if self.game.board_lengths:
                 for row in range(self.game.board_lengths[self.game.current_board]):
                     for col in range(self.game.board_lengths[self.game.current_board]):
                         self.game.screen.blit(self.game.board_images[row][col].image, (self.game.board_images[row][col].x, self.game.board_images[row][col].y))
 
             pg.display.flip()
-    # # for testing
-    # def printBoards(self):
-    #     for x in range(len(self.game.boards)):
-    #         board_size = self.game.board_lengths[x]
-    #         for row in range(board_size):
-    #             for col in range(board_size):
-    #                 print(self.game.boards[x][row][col], end=" ")
-    #             print("")
-    #         print("")
 
-    # This functions gets input boards from a file and adds it to the array of boards
+    # this functions gets input boards from a file and adds it to the array of boards
     def getBoardFile(self):
         f = open("input.txt", "r")
 
-        # Get number of inputs from first line of file
+        # get number of inputs from first line of file
         num_inputs = int(f.readline())
 
-        # Get boards based from the number of inputs
+        # get boards based from the number of inputs
         for x in range(num_inputs):
-            new_board = [] # Initialize new board
-            board_size = int(f.readline()) # Get board size
+            new_board = [] # initialize new board
+            board_size = int(f.readline()) # get board size
             self.game.board_lengths.append(board_size)
             for i in range(board_size):
-                board_row = f.readline().splitlines()[0].split(" ") # Get row of board
+                board_row = f.readline().splitlines()[0].split(" ") # get row of board
                 new_board.append(board_row)
-            self.game.boards.append(new_board) # Add new board to list of boards
-            new_board = [] # Empty array for new row
+            self.game.boards.append(new_board) # add new board to list of boards
+            new_board = [] # empty array for new row
 
         f.close()
 
         self.displayBoard()
     
-    # Display current board
+    # display current board
     def displayBoard(self):
-        # Empty board_images array
+        # empty board_images array
         self.game.board_images = []
 
         image_row = [] # initialize row of images to be pushed
         
         # x and y position where the board will start generating
-        # Depending on the board size, the starting points will be different
+        # depending on the board size, the starting points will be different
         # 3 x 3
         if (self.game.board_lengths[self.game.current_board] == 3):
             start_x = 740
@@ -208,32 +198,32 @@ class Play:
             start_x = 565
             start_y = 80
 
-        # Board size of current board
+        # board size of current board
         board_size = self.game.board_lengths[self.game.current_board]
         
         # will be added for tile spacing
         itr_x = 0
         itr_y = 0
 
-        # Initial tile type
+        # initial tile type
         tile_type = 'white_tile'
 
         # iterate through current board and append to array of images to display
         for row in range(board_size):
             for col in range(board_size):
-                # Check if tile has a chancellor
+                # check if tile has a chancellor
                 if self.game.boards[self.game.current_board][row][col] == '1':
                     image_row.append(Tile(tile_type+'_chancy', True, start_x+itr_x, start_y+itr_y, 70, 71))
                 else:
                     image_row.append(Tile(tile_type, False, start_x+itr_x, start_y+itr_y, 70, 71))
-                # Change tile color per col
+                # change tile color per col
                 tile_type = 'blue_tile' if tile_type == 'white_tile' else 'white_tile'
                 itr_x += 70 # move x to adjust print
             self.game.board_images.append(image_row)
             itr_x = 0
             itr_y += 71 # move y to adjust print
             image_row = [] #empty array for new row
-            # Change tile color again if board size is even
+            # change tile color again if board size is even
             if(board_size % 2 == 0):
                 tile_type = 'blue_tile' if tile_type == 'white_tile' else 'white_tile'
 

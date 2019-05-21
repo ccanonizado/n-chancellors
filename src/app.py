@@ -30,12 +30,12 @@ class Game:
         pg.display.set_caption(TITLE)
     
         self.screen = pg.display.set_mode(BG_SIZE)
-        self.init = False # Check if game has started
+        self.init = False # check if game has started
         self.running = True
         self.status = MENU
         
     def run(self):
-        # Switch page screens
+        # switch page screens
         if self.status == MENU:
             Menu(self)
         elif self.status == PLAY:
@@ -52,7 +52,7 @@ class Game:
 
     def events(self):
         try:
-            # Get all events
+            # get all events
             for event in pg.event.get():
                 # check for closing window
                 if event.type == pg.QUIT:                    
