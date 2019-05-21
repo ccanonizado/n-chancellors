@@ -73,7 +73,7 @@ class Solution:
                 elif event.type == pg.KEYDOWN:
                         if event.key == pg.K_RETURN:
                             # Check if inputted solution number is within range
-                            if( (int(self.input_current_solution) <= self.number_of_solutions) and (int(self.input_current_solution) >= 0)):
+                            if( (int(self.input_current_solution) <= self.number_of_solutions) and (int(self.input_current_solution) > 0)):
                                 self.current_solution = int(self.input_current_solution)-1
                                 self.displaySolution()
                             self.input_current_solution = ''
@@ -93,7 +93,7 @@ class Solution:
                 font = pg.font.SysFont('Big John', 36)
                 currentboard = '%d/%d' % (self.current_solution+1,self.number_of_solutions)
                 textsurface = font.render(currentboard, True, (1, 1, 1))
-                self.game.screen.blit(textsurface,(250,410))
+                self.game.screen.blit(textsurface,(230,410))
                 
                 # Display the user input text field for solution
                 txt_surface = font.render(self.input_current_solution, True, pg.Color('black'))
