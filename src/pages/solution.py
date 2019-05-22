@@ -223,6 +223,14 @@ class Solution:
         elif (self.solution_board_size == 8):
             start_x = 565
             start_y = 80
+        # 9 x 9
+        elif (self.solution_board_size == 9):
+            start_x = 530
+            start_y = 35
+        # 10 x 10
+        elif (self.solution_board_size == 10):
+            start_x = 495
+            start_y = 0
         
         # will be added for tile spacing
         itr_x = 0
